@@ -25,7 +25,10 @@ import {
   Settings,
   Save,
   LogOut,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Briefcase,
+  Leaf,
+  MessageSquare
 } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { translations } from "./translations";
@@ -35,11 +38,13 @@ import { translations } from "./translations";
 const Navbar = ({ 
   onNavigate, 
   lang, 
-  setLang 
+  setLang,
+  currentPage
 }: { 
   onNavigate: (page: string) => void;
-  lang: "ko" | "en";
-  setLang: (lang: "ko" | "en") => void;
+  lang: "ko" | "en" | "vi";
+  setLang: (lang: "ko" | "en" | "vi") => void;
+  currentPage: string;
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -61,6 +66,8 @@ const Navbar = ({
     { name: "Admin", href: "admin", icon: <Lock size={14} /> },
   ];
 
+  const isAboutDetailPage = currentPage === "about-detail";
+
   const handleClick = (e: React.MouseEvent, href: string) => {
     if (href === "about-detail" || href === "home" || href === "admin") {
       e.preventDefault();
@@ -71,11 +78,11 @@ const Navbar = ({
 
   return (
     <nav className={`fixed w-full z-50 transition-all duration-500 ${
-      isScrolled ? "bg-white/95 backdrop-blur-md py-3 shadow-sm" : "bg-transparent py-6"
+      isScrolled || isAboutDetailPage ? "bg-white/95 backdrop-blur-md py-3 shadow-sm" : "bg-transparent py-6"
     }`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         <div 
-          className={`text-xl md:text-2xl font-bold transition-colors duration-300 cursor-pointer ${isScrolled ? "text-seotaean-green" : "text-white"}`}
+          className={`text-xl md:text-2xl font-bold transition-colors duration-300 cursor-pointer ${isScrolled || isAboutDetailPage ? "text-seotaean-green" : "text-white"}`}
           onClick={() => onNavigate("home")}
         >
           {t.companyName}
@@ -83,7 +90,7 @@ const Navbar = ({
         
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-10">
-          <div className={`flex space-x-8 font-medium ${isScrolled ? "text-gray-700" : "text-white/90"}`}>
+          <div className={`flex space-x-8 font-medium ${isScrolled || isAboutDetailPage ? "text-gray-700" : "text-white/90"}`}>
             {navLinks.map((link) => (
               <a 
                 key={link.name} 
@@ -105,7 +112,7 @@ const Navbar = ({
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 lang === "ko" 
                   ? "bg-seotaean-green text-white" 
-                  : isScrolled ? "bg-gray-100 text-gray-400 hover:bg-gray-200" : "bg-white/10 text-white hover:bg-white/20"
+                  : isScrolled || isAboutDetailPage ? "bg-gray-100 text-gray-400 hover:bg-gray-200" : "bg-white/10 text-white hover:bg-white/20"
               }`}
             >
               KR
@@ -115,17 +122,27 @@ const Navbar = ({
               className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 lang === "en" 
                   ? "bg-seotaean-green text-white" 
-                  : isScrolled ? "bg-gray-100 text-gray-400 hover:bg-gray-200" : "bg-white/10 text-white hover:bg-white/20"
+                  : isScrolled || isAboutDetailPage ? "bg-gray-100 text-gray-400 hover:bg-gray-200" : "bg-white/10 text-white hover:bg-white/20"
               }`}
             >
               EN
+            </button>
+            <button 
+              onClick={() => setLang("vi")}
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                lang === "vi" 
+                  ? "bg-seotaean-green text-white" 
+                  : isScrolled || isAboutDetailPage ? "bg-gray-100 text-gray-400 hover:bg-gray-200" : "bg-white/10 text-white hover:bg-white/20"
+              }`}
+            >
+              VN
             </button>
           </div>
         </div>
 
         {/* Mobile Toggle */}
         <button 
-          className={`md:hidden p-2 rounded-lg ${isScrolled ? "text-gray-800" : "text-white"}`}
+          className={`md:hidden p-2 rounded-lg ${isScrolled || isAboutDetailPage ? "text-gray-800" : "text-white"}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
@@ -312,27 +329,36 @@ const About = ({
   );
 };
 
-const Business = ({ lang }: { lang: "ko" | "en" }) => {
+const Business = ({ 
+  lang,
+  customData
+}: { 
+  lang: "ko" | "en";
+  customData?: any;
+}) => {
   const t = translations[lang].business;
+  const badge = customData?.badge || t.badge;
+  const title = customData?.title || t.title;
+  
   const businesses = [
     {
       icon: Sun,
-      title: t.biz1.title,
-      desc: t.biz1.desc,
+      title: customData?.biz1Title || t.biz1.title,
+      desc: customData?.biz1Desc || t.biz1.desc,
       items: t.biz1.items,
       color: "bg-amber-50 text-amber-600"
     },
     {
       icon: CheckCircle2,
-      title: t.biz2.title,
-      desc: t.biz2.desc,
+      title: customData?.biz2Title || t.biz2.title,
+      desc: customData?.biz2Desc || t.biz2.desc,
       items: t.biz2.items,
       color: "bg-green-50 text-seotaean-green"
     },
     {
       icon: Monitor,
-      title: t.biz3.title,
-      desc: t.biz3.desc,
+      title: customData?.biz3Title || t.biz3.title,
+      desc: customData?.biz3Desc || t.biz3.desc,
       items: t.biz3.items,
       color: "bg-blue-50 text-blue-600"
     }
@@ -342,8 +368,8 @@ const Business = ({ lang }: { lang: "ko" | "en" }) => {
     <section id="business" className="py-32 bg-stone-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-20">
-          <span className="text-seotaean-green font-bold tracking-widest uppercase text-sm mb-4 block">{t.badge}</span>
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{t.title}</h2>
+          <span className="text-seotaean-green font-bold tracking-widest uppercase text-sm mb-4 block">{badge}</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">{title}</h2>
           <div className="w-20 h-1.5 bg-seotaean-green mx-auto rounded-full"></div>
         </div>
 
@@ -502,8 +528,21 @@ const Product = ({
   );
 };
 
-const SmartFarm = ({ lang }: { lang: "ko" | "en" }) => {
+const SmartFarm = ({ 
+  lang,
+  customData
+}: { 
+  lang: "ko" | "en";
+  customData?: any;
+}) => {
   const t = translations[lang].smartfarm;
+  const title1 = customData?.title1 || t.title1;
+  const title2 = customData?.title2 || t.title2;
+  const feature1Title = customData?.feature1Title || t.feature1.title;
+  const feature1Desc = customData?.feature1Desc || t.feature1.desc;
+  const feature2Title = customData?.feature2Title || t.feature2.title;
+  const feature2Desc = customData?.feature2Desc || t.feature2.desc;
+
   return (
     <section id="smartfarm" className="py-32 bg-beige/30">
       <div className="container mx-auto px-6">
@@ -515,7 +554,7 @@ const SmartFarm = ({ lang }: { lang: "ko" | "en" }) => {
             >
               <span className="text-seotaean-green font-bold tracking-widest uppercase text-sm mb-4 block">{t.badge}</span>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
-                {t.title1} <br /> {t.title2}
+                {title1} <br /> {title2}
               </h2>
               <div className="space-y-8 mb-12">
                 <div className="flex gap-6">
@@ -523,8 +562,8 @@ const SmartFarm = ({ lang }: { lang: "ko" | "en" }) => {
                     <Sprout size={28} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">{t.feature1.title}</h4>
-                    <p className="text-gray-600">{t.feature1.desc}</p>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">{feature1Title}</h4>
+                    <p className="text-gray-600">{feature1Desc}</p>
                   </div>
                 </div>
                 <div className="flex gap-6">
@@ -532,8 +571,8 @@ const SmartFarm = ({ lang }: { lang: "ko" | "en" }) => {
                     <Globe size={28} />
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">{t.feature2.title}</h4>
-                    <p className="text-gray-600">{t.feature2.desc}</p>
+                    <h4 className="text-xl font-bold text-gray-900 mb-2">{feature2Title}</h4>
+                    <p className="text-gray-600">{feature2Desc}</p>
                   </div>
                 </div>
               </div>
@@ -595,15 +634,18 @@ const Contact = ({
   const t = translations[lang].contact;
   const phone = customData?.phone || "010-6514-3231";
   const email = customData?.email || "70percent@gmail.com";
+  const title1 = customData?.title1 || t.title1;
+  const title2 = customData?.title2 || t.title2;
+  const desc1 = customData?.desc1 || t.desc1;
 
   return (
     <section id="contact" className="py-32 bg-white">
       <div className="container mx-auto px-6">
         <div className="bg-seotaean-green rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row">
           <div className="lg:w-1/2 p-12 lg:p-20 text-white">
-            <h2 className="text-4xl md:text-5xl font-bold mb-8">{t.title1} <br /> {t.title2}</h2>
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">{title1} <br /> {title2}</h2>
             <p className="text-white/80 text-lg mb-12 leading-relaxed">
-              {t.desc1} <br />
+              {desc1} <br />
               {t.desc2} <br />
               {t.desc3}
             </p>
@@ -677,16 +719,19 @@ const Footer = ({
   const phone = customData?.phone || "010-6514-3231";
   const email = customData?.email || "70percent@gmail.com";
   const address = customData?.address || t.address;
+  const companyName = customData?.companyName || t.companyName;
+  const desc1 = customData?.desc1 || t.desc1;
+  const desc2 = customData?.desc2 || t.desc2;
 
   return (
     <footer className="bg-stone-900 text-white py-20">
       <div className="container mx-auto px-6">
         <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
           <div>
-            <div className="text-2xl font-bold mb-6">{t.companyName}</div>
+            <div className="text-2xl font-bold mb-6">{companyName}</div>
             <p className="text-stone-400 max-w-sm leading-relaxed">
-              {t.desc1} <br />
-              {t.desc2}
+              {desc1} <br />
+              {desc2}
             </p>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
@@ -728,8 +773,21 @@ const Footer = ({
   );
 };
 
-const AboutDetail = ({ lang }: { lang: "ko" | "en" }) => {
+const AboutDetail = ({ 
+  lang,
+  customData
+}: { 
+  lang: "ko" | "en";
+  customData?: any;
+}) => {
   const t = translations[lang].aboutDetail;
+  const philosophy = customData?.philosophy || t.philosophy;
+  const philosophyDesc = customData?.philosophyDesc || t.philosophyDesc;
+  const h2026_2 = customData?.history2026_2 || t.history2026_2;
+  const h2026_1 = customData?.history2026_1 || t.history2026_1;
+  const h2025_2 = customData?.history2025_2 || t.history2025_2;
+  const h2025_1 = customData?.history2025_1 || t.history2025_1;
+
   return (
     <motion.section 
       initial={{ opacity: 0 }}
@@ -754,25 +812,27 @@ const AboutDetail = ({ lang }: { lang: "ko" | "en" }) => {
 
           <div className="grid md:grid-cols-2 gap-16 mb-20">
             <div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">{t.philosophy}</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">{philosophy}</h3>
               <p className="text-gray-600 leading-relaxed text-lg">
-                {t.philosophyDesc}
+                {philosophyDesc}
               </p>
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">{t.history}</h3>
               <ul className="space-y-4">
                 <li className="flex gap-4">
-                  <span className="font-bold text-seotaean-green">2024</span>
-                  <span className="text-gray-600">{t.history2024}</span>
+                  <span className="font-bold text-seotaean-green">2026</span>
+                  <div className="flex flex-col">
+                    <span className="text-gray-600">{h2026_2}</span>
+                    <span className="text-gray-600">{h2026_1}</span>
+                  </div>
                 </li>
                 <li className="flex gap-4">
-                  <span className="font-bold text-seotaean-green">2023</span>
-                  <span className="text-gray-600">{t.history2023}</span>
-                </li>
-                <li className="flex gap-4">
-                  <span className="font-bold text-seotaean-green">2022</span>
-                  <span className="text-gray-600">{t.history2022}</span>
+                  <span className="font-bold text-seotaean-green">2025</span>
+                  <div className="flex flex-col">
+                    <span className="text-gray-600">{h2025_2}</span>
+                    <span className="text-gray-600">{h2025_1}</span>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -806,7 +866,7 @@ const Admin = ({
   siteData, 
   updateSiteData 
 }: { 
-  lang: "ko" | "en";
+  lang: "ko" | "en" | "vi";
   siteData: any;
   updateSiteData: (newData: any) => void;
 }) => {
@@ -815,6 +875,87 @@ const Admin = ({
   const [pw, setPw] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("general");
+  const [editLang, setEditLang] = useState<"ko" | "en" | "vi">("ko");
+
+  const t = lang === "ko" ? {
+    loginTitle: "관리자 로그인",
+    loginDesc: "사이트 콘텐츠 관리를 위해 로그인해 주세요.",
+    idLabel: "아이디",
+    pwLabel: "비밀번호",
+    loginBtn: "로그인",
+    loginError: "아이디 또는 비밀번호가 올바르지 않습니다.",
+    panelTitle: "사이트 관리자 패널",
+    panelDesc: "실시간으로 사이트의 정보를 수정할 수 있습니다.",
+    logout: "로그아웃",
+    tabGeneral: "기본 정보",
+    tabHero: "메인 히어로",
+    tabAbout: "회사 소개",
+    tabProduct: "제품 관리",
+    tabImages: "이미지 관리",
+    saveBtn: "설정 저장하기",
+    saveAlert: "설정이 저장되었습니다. (브라우저 로컬 저장소)",
+    contactTitle: "연락처 및 주소 설정",
+    phoneLabel: "대표 전화",
+    emailLabel: "대표 이메일",
+    addressLabel: "회사 주소",
+    heroTitle: "메인 히어로 문구 수정",
+    title1Label: "메인 타이틀 1",
+    title2Label: "메인 타이틀 2",
+    desc1Label: "서브 설명 1",
+    aboutTitle: "회사 소개 및 인사말",
+    aboutTitleLabel: "인사말 타이틀",
+    aboutDescLabel: "회사 소개 본문",
+    product1Title: "제품 1: 아이스 군고구마",
+    product2Title: "제품 2: 태안 쌀",
+    detailLabel: "상세 설명 (수출용)",
+    imageTitle: "주요 이미지 URL 관리",
+    heroImgLabel: "메인 히어로 배경 이미지",
+    aboutImgLabel: "회사 소개 이미지",
+    editLangLabel: "수정할 언어 선택"
+  } : {
+    loginTitle: "Admin Login",
+    loginDesc: "Please login to manage site content.",
+    idLabel: "ID",
+    pwLabel: "Password",
+    loginBtn: "Login",
+    loginError: "Invalid ID or Password.",
+    panelTitle: "Site Admin Panel",
+    panelDesc: "You can edit site information in real-time.",
+    logout: "Logout",
+    tabGeneral: "General Info",
+    tabHero: "Main Hero",
+    tabAbout: "About Us",
+    tabProduct: "Products",
+    tabImages: "Images",
+    saveBtn: "Save Settings",
+    saveAlert: "Settings saved. (Browser Local Storage)",
+    contactTitle: "Contact & Address Settings",
+    phoneLabel: "Main Phone",
+    emailLabel: "Main Email",
+    addressLabel: "Company Address",
+    heroTitle: "Main Hero Text Edit",
+    title1Label: "Main Title 1",
+    title2Label: "Main Title 2",
+    desc1Label: "Sub Description 1",
+    aboutTitle: "About Us & Greetings",
+    aboutTitleLabel: "Greeting Title",
+    aboutDescLabel: "About Us Content",
+    product1Title: "Product 1: Ice Sweet Potato",
+    product2Title: "Product 2: Taean Rice",
+    detailLabel: "Detailed Description (for Export)",
+    imageTitle: "Main Image URL Management",
+    heroImgLabel: "Main Hero Background Image",
+    aboutImgLabel: "About Us Image",
+    editLangLabel: "Select Language to Edit",
+    tabBusiness: "Business",
+    tabSmartFarm: "Smart Farm",
+    tabContactFooter: "Contact & Footer",
+    tabAboutDetail: "About Detail",
+    bizTitle: "Business Section Edit",
+    sfTitle: "Smart Farm Section Edit",
+    cfTitle: "Contact & Footer Section Edit",
+    adTitle: "About Detail Section Edit"
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -822,18 +963,33 @@ const Admin = ({
       setIsLoggedIn(true);
       setError("");
     } else {
-      setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+      setError(t.loginError);
     }
   };
 
   const handleChange = (section: string, field: string, value: string) => {
-    updateSiteData({
-      ...siteData,
-      [section]: {
-        ...siteData[section],
-        [field]: value
-      }
-    });
+    if (section === "general" || section === "images") {
+      updateSiteData({
+        ...siteData,
+        [section]: {
+          ...(siteData[section] || {}),
+          [field]: value
+        }
+      });
+    } else {
+      const langData = siteData[editLang] || {};
+      const sectionData = langData[section] || {};
+      updateSiteData({
+        ...siteData,
+        [editLang]: {
+          ...langData,
+          [section]: {
+            ...sectionData,
+            [field]: value
+          }
+        }
+      });
+    }
   };
 
   if (!isLoggedIn) {
@@ -848,13 +1004,13 @@ const Admin = ({
             <div className="w-16 h-16 bg-seotaean-green/10 rounded-2xl flex items-center justify-center text-seotaean-green mb-4">
               <Lock size={32} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">관리자 로그인</h2>
-            <p className="text-gray-500 text-sm mt-2">사이트 콘텐츠 관리를 위해 로그인해 주세요.</p>
+            <h2 className="text-2xl font-bold text-gray-900">{t.loginTitle}</h2>
+            <p className="text-gray-500 text-sm mt-2">{t.loginDesc}</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">아이디</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t.idLabel}</label>
               <input 
                 type="text" 
                 value={id}
@@ -864,7 +1020,7 @@ const Admin = ({
               />
             </div>
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">비밀번호</label>
+              <label className="block text-sm font-bold text-gray-700 mb-2">{t.pwLabel}</label>
               <input 
                 type="password" 
                 value={pw}
@@ -875,7 +1031,7 @@ const Admin = ({
             </div>
             {error && <p className="text-red-500 text-sm font-medium">{error}</p>}
             <button className="w-full bg-seotaean-green text-white py-4 rounded-xl font-bold hover:bg-green-800 transition-all shadow-lg">
-              로그인
+              {t.loginBtn}
             </button>
           </form>
         </motion.div>
@@ -890,27 +1046,54 @@ const Admin = ({
           <div>
             <h2 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
               <Settings className="text-seotaean-green" />
-              사이트 관리자 패널
+              {t.panelTitle}
             </h2>
-            <p className="text-gray-500 mt-1">실시간으로 사이트의 정보를 수정할 수 있습니다.</p>
+            <p className="text-gray-500 mt-1">{t.panelDesc}</p>
           </div>
           <button 
             onClick={() => setIsLoggedIn(false)}
             className="flex items-center gap-2 text-gray-500 hover:text-red-500 font-medium transition-colors"
           >
-            <LogOut size={18} /> 로그아웃
+            <LogOut size={18} /> {t.logout}
           </button>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-10">
           {/* Sidebar Tabs */}
           <div className="lg:w-64 shrink-0 space-y-2">
+            <div className="mb-6 p-4 bg-white rounded-2xl border border-stone-100">
+              <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{t.editLangLabel}</label>
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setEditLang("ko")}
+                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${editLang === "ko" ? "bg-seotaean-green text-white shadow-md" : "bg-gray-50 text-gray-400 hover:bg-gray-100"}`}
+                >
+                  한국어
+                </button>
+                <button 
+                  onClick={() => setEditLang("en")}
+                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${editLang === "en" ? "bg-seotaean-green text-white shadow-md" : "bg-gray-50 text-gray-400 hover:bg-gray-100"}`}
+                >
+                  English
+                </button>
+                <button 
+                  onClick={() => setEditLang("vi")}
+                  className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${editLang === "vi" ? "bg-seotaean-green text-white shadow-md" : "bg-gray-50 text-gray-400 hover:bg-gray-100"}`}
+                >
+                  Tiếng Việt
+                </button>
+              </div>
+            </div>
             {[
-              { id: "general", label: "기본 정보", icon: <Globe size={18} /> },
-              { id: "hero", label: "메인 히어로", icon: <Sun size={18} /> },
-              { id: "about", label: "회사 소개", icon: <Users size={18} /> },
-              { id: "product", label: "제품 관리", icon: <ShoppingBag size={18} /> },
-              { id: "images", label: "이미지 관리", icon: <ImageIcon size={18} /> },
+              { id: "general", label: t.tabGeneral, icon: <Globe size={18} /> },
+              { id: "hero", label: t.tabHero, icon: <Sun size={18} /> },
+              { id: "about", label: t.tabAbout, icon: <Users size={18} /> },
+              { id: "business", label: t.tabBusiness, icon: <Briefcase size={18} /> },
+              { id: "product", label: t.tabProduct, icon: <ShoppingBag size={18} /> },
+              { id: "smartfarm", label: t.tabSmartFarm, icon: <Leaf size={18} /> },
+              { id: "contactfooter", label: t.tabContactFooter, icon: <MessageSquare size={18} /> },
+              { id: "aboutdetail", label: t.tabAboutDetail, icon: <Award size={18} /> },
+              { id: "images", label: t.tabImages, icon: <ImageIcon size={18} /> },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -931,31 +1114,31 @@ const Admin = ({
           <div className="flex-grow bg-white rounded-[2.5rem] shadow-sm border border-stone-100 p-8 md:p-12">
             {activeTab === "general" && (
               <div className="space-y-8">
-                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">연락처 및 주소 설정</h3>
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.contactTitle}</h3>
                 <div className="grid md:grid-cols-2 gap-8">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">대표 전화</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.phoneLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.general.phone}
+                      value={siteData.general?.phone || ""}
                       onChange={(e) => handleChange("general", "phone", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">대표 이메일</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.emailLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.general.email}
+                      value={siteData.general?.email || ""}
                       onChange={(e) => handleChange("general", "email", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-bold text-gray-700 mb-2">회사 주소</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.addressLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.general.address}
+                      value={siteData.general?.address || ""}
                       onChange={(e) => handleChange("general", "address", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
@@ -966,31 +1149,34 @@ const Admin = ({
 
             {activeTab === "hero" && (
               <div className="space-y-8">
-                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">메인 히어로 문구 수정</h3>
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.heroTitle} ({editLang.toUpperCase()})</h3>
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">메인 타이틀 1</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.title1Label}</label>
                     <input 
                       type="text" 
-                      value={siteData.hero.title1}
+                      value={siteData[editLang]?.hero?.title1 || ""}
+                      placeholder={translations[editLang].hero.title1}
                       onChange={(e) => handleChange("hero", "title1", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">메인 타이틀 2</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.title2Label}</label>
                     <input 
                       type="text" 
-                      value={siteData.hero.title2}
+                      value={siteData[editLang]?.hero?.title2 || ""}
+                      placeholder={translations[editLang].hero.title2}
                       onChange={(e) => handleChange("hero", "title2", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">서브 설명 1</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.desc1Label}</label>
                     <input 
                       type="text" 
-                      value={siteData.hero.desc1}
+                      value={siteData[editLang]?.hero?.desc1 || ""}
+                      placeholder={translations[editLang].hero.desc1}
                       onChange={(e) => handleChange("hero", "desc1", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
@@ -1001,21 +1187,23 @@ const Admin = ({
 
             {activeTab === "about" && (
               <div className="space-y-8">
-                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">회사 소개 및 인사말</h3>
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.aboutTitle} ({editLang.toUpperCase()})</h3>
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">인사말 타이틀</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.aboutTitleLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.about.title}
+                      value={siteData[editLang]?.about?.title || ""}
+                      placeholder={translations[editLang].about.title2}
                       onChange={(e) => handleChange("about", "title", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">회사 소개 본문</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.aboutDescLabel}</label>
                     <textarea 
-                      value={siteData.about.desc}
+                      value={siteData[editLang]?.about?.desc || ""}
+                      placeholder={translations[editLang].about.desc}
                       onChange={(e) => handleChange("about", "desc", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none h-40 resize-none" 
                     />
@@ -1024,25 +1212,72 @@ const Admin = ({
               </div>
             )}
 
+            {activeTab === "business" && (
+              <div className="space-y-8">
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.bizTitle} ({editLang.toUpperCase()})</h3>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Business Badge</label>
+                    <input 
+                      type="text" 
+                      value={siteData[editLang]?.business?.badge || ""}
+                      placeholder={translations[editLang].business.badge}
+                      onChange={(e) => handleChange("business", "badge", e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Business Title</label>
+                    <input 
+                      type="text" 
+                      value={siteData[editLang]?.business?.title || ""}
+                      placeholder={translations[editLang].business.title}
+                      onChange={(e) => handleChange("business", "title", e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
+                    />
+                  </div>
+                  <div className="grid md:grid-cols-3 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-bold text-seotaean-green">Business 1</h4>
+                      <input type="text" value={siteData[editLang]?.business?.biz1Title || ""} placeholder={translations[editLang].business.biz1.title} onChange={(e) => handleChange("business", "biz1Title", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <textarea value={siteData[editLang]?.business?.biz1Desc || ""} placeholder={translations[editLang].business.biz1.desc} onChange={(e) => handleChange("business", "biz1Desc", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-24 resize-none" />
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-bold text-seotaean-green">Business 2</h4>
+                      <input type="text" value={siteData[editLang]?.business?.biz2Title || ""} placeholder={translations[editLang].business.biz2.title} onChange={(e) => handleChange("business", "biz2Title", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <textarea value={siteData[editLang]?.business?.biz2Desc || ""} placeholder={translations[editLang].business.biz2.desc} onChange={(e) => handleChange("business", "biz2Desc", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-24 resize-none" />
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-bold text-seotaean-green">Business 3</h4>
+                      <input type="text" value={siteData[editLang]?.business?.biz3Title || ""} placeholder={translations[editLang].business.biz3.title} onChange={(e) => handleChange("business", "biz3Title", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <textarea value={siteData[editLang]?.business?.biz3Desc || ""} placeholder={translations[editLang].business.biz3.desc} onChange={(e) => handleChange("business", "biz3Desc", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-24 resize-none" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {activeTab === "product" && (
               <div className="space-y-12">
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-900 border-b pb-4">제품 1: 아이스 군고구마</h3>
+                  <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.product1Title} ({editLang.toUpperCase()})</h3>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">상세 설명 (수출용)</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.detailLabel}</label>
                     <textarea 
-                      value={siteData.product.item1Detail}
+                      value={siteData[editLang]?.product?.item1Detail || ""}
+                      placeholder={translations[editLang].product.item1.detail}
                       onChange={(e) => handleChange("product", "item1Detail", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none h-32 resize-none" 
                     />
                   </div>
                 </div>
                 <div className="space-y-6">
-                  <h3 className="text-xl font-bold text-gray-900 border-b pb-4">제품 2: 태안 쌀</h3>
+                  <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.product2Title} ({editLang.toUpperCase()})</h3>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">상세 설명 (수출용)</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.detailLabel}</label>
                     <textarea 
-                      value={siteData.product.item2Detail}
+                      value={siteData[editLang]?.product?.item2Detail || ""}
+                      placeholder={translations[editLang].product.item2.detail}
                       onChange={(e) => handleChange("product", "item2Detail", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none h-32 resize-none" 
                     />
@@ -1051,24 +1286,115 @@ const Admin = ({
               </div>
             )}
 
-            {activeTab === "images" && (
+            {activeTab === "smartfarm" && (
               <div className="space-y-8">
-                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">주요 이미지 URL 관리</h3>
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.sfTitle} ({editLang.toUpperCase()})</h3>
+                <div className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Smart Farm Title 1</label>
+                      <input type="text" value={siteData[editLang]?.smartfarm?.title1 || ""} placeholder={translations[editLang].smartfarm.title1} onChange={(e) => handleChange("smartfarm", "title1", e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">Smart Farm Title 2</label>
+                      <input type="text" value={siteData[editLang]?.smartfarm?.title2 || ""} placeholder={translations[editLang].smartfarm.title2} onChange={(e) => handleChange("smartfarm", "title2", e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none" />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-bold text-seotaean-green">Feature 1</h4>
+                      <input type="text" value={siteData[editLang]?.smartfarm?.feature1Title || ""} placeholder={translations[editLang].smartfarm.feature1.title} onChange={(e) => handleChange("smartfarm", "feature1Title", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <textarea value={siteData[editLang]?.smartfarm?.feature1Desc || ""} placeholder={translations[editLang].smartfarm.feature1.desc} onChange={(e) => handleChange("smartfarm", "feature1Desc", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-24 resize-none" />
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-bold text-seotaean-green">Feature 2</h4>
+                      <input type="text" value={siteData[editLang]?.smartfarm?.feature2Title || ""} placeholder={translations[editLang].smartfarm.feature2.title} onChange={(e) => handleChange("smartfarm", "feature2Title", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <textarea value={siteData[editLang]?.smartfarm?.feature2Desc || ""} placeholder={translations[editLang].smartfarm.feature2.desc} onChange={(e) => handleChange("smartfarm", "feature2Desc", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-24 resize-none" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "contactfooter" && (
+              <div className="space-y-8">
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.cfTitle} ({editLang.toUpperCase()})</h3>
+                <div className="space-y-8">
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-seotaean-green">Contact Section</h4>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <input type="text" value={siteData[editLang]?.contact?.title1 || ""} placeholder={translations[editLang].contact.title1} onChange={(e) => handleChange("contact", "title1", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <input type="text" value={siteData[editLang]?.contact?.title2 || ""} placeholder={translations[editLang].contact.title2} onChange={(e) => handleChange("contact", "title2", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                    </div>
+                    <textarea value={siteData[editLang]?.contact?.desc1 || ""} placeholder={translations[editLang].contact.desc1} onChange={(e) => handleChange("contact", "desc1", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm h-20 resize-none" />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-seotaean-green">Footer Section</h4>
+                    <input type="text" value={siteData[editLang]?.footer?.companyName || ""} placeholder={translations[editLang].footer.companyName} onChange={(e) => handleChange("footer", "companyName", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <input type="text" value={siteData[editLang]?.footer?.desc1 || ""} placeholder={translations[editLang].footer.desc1} onChange={(e) => handleChange("footer", "desc1", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      <input type="text" value={siteData[editLang]?.footer?.desc2 || ""} placeholder={translations[editLang].footer.desc2} onChange={(e) => handleChange("footer", "desc2", e.target.value)} className="w-full px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "aboutdetail" && (
+              <div className="space-y-8">
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.adTitle} ({editLang.toUpperCase()})</h3>
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">메인 히어로 배경 이미지</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Philosophy Title</label>
+                    <input type="text" value={siteData[editLang]?.aboutDetail?.philosophy || ""} placeholder={translations[editLang].aboutDetail.philosophy} onChange={(e) => handleChange("aboutDetail", "philosophy", e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Philosophy Description</label>
+                    <textarea value={siteData[editLang]?.aboutDetail?.philosophyDesc || ""} placeholder={translations[editLang].aboutDetail.philosophyDesc} onChange={(e) => handleChange("aboutDetail", "philosophyDesc", e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none h-32 resize-none" />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="font-bold text-seotaean-green">History Items</h4>
+                    <div className="grid gap-4">
+                      <div className="flex gap-4 items-center">
+                        <span className="w-20 text-xs font-bold text-gray-400">2026 #2</span>
+                        <input type="text" value={siteData[editLang]?.aboutDetail?.history2026_2 || ""} placeholder={translations[editLang].aboutDetail.history2026_2} onChange={(e) => handleChange("aboutDetail", "history2026_2", e.target.value)} className="flex-grow px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      </div>
+                      <div className="flex gap-4 items-center">
+                        <span className="w-20 text-xs font-bold text-gray-400">2026 #1</span>
+                        <input type="text" value={siteData[editLang]?.aboutDetail?.history2026_1 || ""} placeholder={translations[editLang].aboutDetail.history2026_1} onChange={(e) => handleChange("aboutDetail", "history2026_1", e.target.value)} className="flex-grow px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      </div>
+                      <div className="flex gap-4 items-center">
+                        <span className="w-20 text-xs font-bold text-gray-400">2025 #2</span>
+                        <input type="text" value={siteData[editLang]?.aboutDetail?.history2025_2 || ""} placeholder={translations[editLang].aboutDetail.history2025_2} onChange={(e) => handleChange("aboutDetail", "history2025_2", e.target.value)} className="flex-grow px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      </div>
+                      <div className="flex gap-4 items-center">
+                        <span className="w-20 text-xs font-bold text-gray-400">2025 #1</span>
+                        <input type="text" value={siteData[editLang]?.aboutDetail?.history2025_1 || ""} placeholder={translations[editLang].aboutDetail.history2025_1} onChange={(e) => handleChange("aboutDetail", "history2025_1", e.target.value)} className="flex-grow px-4 py-2 rounded-lg border border-gray-200 text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === "images" && (
+              <div className="space-y-8">
+                <h3 className="text-xl font-bold text-gray-900 border-b pb-4">{t.imageTitle}</h3>
+                <div className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.heroImgLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.images.hero}
+                      value={siteData.images?.hero || ""}
                       onChange={(e) => handleChange("images", "hero", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">회사 소개 이미지</label>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">{t.aboutImgLabel}</label>
                     <input 
                       type="text" 
-                      value={siteData.images.about}
+                      value={siteData.images?.about}
                       onChange={(e) => handleChange("images", "about", e.target.value)}
                       className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-seotaean-green outline-none" 
                     />
@@ -1081,11 +1407,11 @@ const Admin = ({
               <button 
                 onClick={() => {
                   localStorage.setItem("seotaean_site_data", JSON.stringify(siteData));
-                  alert("설정이 저장되었습니다. (브라우저 로컬 저장소)");
+                  alert(t.saveAlert);
                 }}
                 className="bg-seotaean-green text-white px-10 py-4 rounded-xl font-bold hover:bg-green-800 transition-all shadow-lg flex items-center gap-2"
               >
-                <Save size={20} /> 설정 저장하기
+                <Save size={20} /> {t.saveBtn}
               </button>
             </div>
           </div>
@@ -1097,57 +1423,92 @@ const Admin = ({
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("home");
-  const [lang, setLang] = useState<"ko" | "en">("ko");
+  const [lang, setLang] = useState<"ko" | "en" | "vi">("ko");
 
   // Editable Site Data
   const [siteData, setSiteData] = useState(() => {
-    const saved = localStorage.getItem("seotaean_site_data");
-    if (saved) return JSON.parse(saved);
-    
-    return {
+    const defaults = {
       general: {
         phone: "010-6514-3231",
         email: "70percent@gmail.com",
         address: "충청남도 태안군 [나머지 주소]"
       },
-      hero: {
-        title1: translations.ko.hero.title1,
-        title2: translations.ko.hero.title2,
-        desc1: translations.ko.hero.desc1
-      },
-      about: {
-        title: translations.ko.about.title2,
-        desc: translations.ko.about.desc
-      },
-      product: {
-        item1Detail: translations.ko.product.item1.detail,
-        item2Detail: translations.ko.product.item2.detail
-      },
       images: {
         hero: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1920",
         about: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&q=80&w=1200"
+      },
+      ko: {
+        hero: { title1: "", title2: "", desc1: "" },
+        about: { title: "", desc: "" },
+        business: { badge: "", title: "", biz1Title: "", biz1Desc: "", biz2Title: "", biz2Desc: "", biz3Title: "", biz3Desc: "" },
+        product: { item1Detail: "", item2Detail: "" },
+        smartfarm: { title1: "", title2: "", feature1Title: "", feature1Desc: "", feature2Title: "", feature2Desc: "" },
+        contact: { title1: "", title2: "", desc1: "" },
+        footer: { companyName: "", desc1: "", desc2: "" },
+        aboutDetail: { philosophy: "", philosophyDesc: "", history2026_2: "", history2026_1: "", history2025_2: "", history2025_1: "" }
+      },
+      en: {
+        hero: { title1: "", title2: "", desc1: "" },
+        about: { title: "", desc: "" },
+        business: { badge: "", title: "", biz1Title: "", biz1Desc: "", biz2Title: "", biz2Desc: "", biz3Title: "", biz3Desc: "" },
+        product: { item1Detail: "", item2Detail: "" },
+        smartfarm: { title1: "", title2: "", feature1Title: "", feature1Desc: "", feature2Title: "", feature2Desc: "" },
+        contact: { title1: "", title2: "", desc1: "" },
+        footer: { companyName: "", desc1: "", desc2: "" },
+        aboutDetail: { philosophy: "", philosophyDesc: "", history2026_2: "", history2026_1: "", history2025_2: "", history2025_1: "" }
+      },
+      vi: {
+        hero: { title1: "", title2: "", desc1: "" },
+        about: { title: "", desc: "" },
+        business: { badge: "", title: "", biz1Title: "", biz1Desc: "", biz2Title: "", biz2Desc: "", biz3Title: "", biz3Desc: "" },
+        product: { item1Detail: "", item2Detail: "" },
+        smartfarm: { title1: "", title2: "", feature1Title: "", feature1Desc: "", feature2Title: "", feature2Desc: "" },
+        contact: { title1: "", title2: "", desc1: "" },
+        footer: { companyName: "", desc1: "", desc2: "" },
+        aboutDetail: { philosophy: "", philosophyDesc: "", history2026_2: "", history2026_1: "", history2025_2: "", history2025_1: "" }
       }
     };
+
+    const saved = localStorage.getItem("seotaean_site_data");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        // Deep merge logic for ko/en/vi sections
+        return {
+          ...defaults,
+          ...parsed,
+          general: { ...defaults.general, ...parsed.general },
+          images: { ...defaults.images, ...parsed.images },
+          ko: parsed.ko ? { ...defaults.ko, ...parsed.ko } : defaults.ko,
+          en: parsed.en ? { ...defaults.en, ...parsed.en } : defaults.en,
+          vi: parsed.vi ? { ...defaults.vi, ...parsed.vi } : defaults.vi
+        };
+      } catch (e) {
+        return defaults;
+      }
+    }
+    
+    return defaults;
   });
 
   return (
     <div className="min-h-screen selection:bg-green-100 selection:text-seotaean-green">
-      <Navbar onNavigate={setCurrentPage} lang={lang} setLang={setLang} />
+      <Navbar onNavigate={setCurrentPage} lang={lang} setLang={setLang} currentPage={currentPage} />
       {currentPage === "home" ? (
         <>
-          <Hero lang={lang} customData={siteData.hero} customImages={siteData.images} />
-          <About onNavigate={setCurrentPage} lang={lang} customData={siteData.about} customImages={siteData.images} />
-          <Business lang={lang} />
-          <Product lang={lang} customData={siteData.product} />
-          <SmartFarm lang={lang} />
-          <Contact lang={lang} customData={siteData.general} />
+          <Hero lang={lang} customData={siteData[lang]?.hero} customImages={siteData.images} />
+          <About onNavigate={setCurrentPage} lang={lang} customData={siteData[lang]?.about} customImages={siteData.images} />
+          <Business lang={lang} customData={siteData[lang]?.business} />
+          <Product lang={lang} customData={siteData[lang]?.product} />
+          <SmartFarm lang={lang} customData={siteData[lang]?.smartfarm} />
+          <Contact lang={lang} customData={{...siteData.general, ...siteData[lang]?.contact}} />
         </>
       ) : currentPage === "admin" ? (
         <Admin lang={lang} siteData={siteData} updateSiteData={setSiteData} />
       ) : (
-        <AboutDetail lang={lang} />
+        <AboutDetail lang={lang} customData={siteData[lang]?.aboutDetail} />
       )}
-      <Footer lang={lang} customData={siteData.general} />
+      <Footer lang={lang} customData={{...siteData.general, ...siteData[lang]?.footer}} />
     </div>
   );
 }

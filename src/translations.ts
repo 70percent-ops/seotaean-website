@@ -126,9 +126,10 @@ export const translations = {
       philosophy: "경영 이념",
       philosophyDesc: "농업회사법인 서태안(주)은 '정직', '혁신', '상생'의 가치를 최우선으로 합니다. 태안의 비옥한 토양에서 자란 농산물에 스마트 기술을 더해, 소비자에게는 건강한 먹거리를, 농가에게는 안정적인 수익을 제공하는 지속 가능한 농업 생태계를 구축합니다.",
       history: "주요 연혁",
-      history2024: "스마트팜 체험관 개관 및 교육 프로그램 런칭",
-      history2023: "아이스군고구마 가공 시설 HACCP 인증 획득",
-      history2022: "농업회사법인 서태안(주) 설립 및 태안 쌀 유통 시작",
+      history2026_2: "스마트팜 체험관 및 교육 프로그램 런칭",
+      history2026_1: "아이스군고구마 개발",
+      history2025_2: "네이버 스마트스토어 등록",
+      history2025_1: "농업회사법인 서태안(주) 설립 및 태안 쌀 유통 시작",
       promise: "우리의 약속",
       promise1: "100% 국내산/태안산 원물 사용",
       promise2: "ICT 기반 정밀 농업 실현",
@@ -138,8 +139,8 @@ export const translations = {
   en: {
     nav: {
       home: "Home",
-      about: "About",
-      business: "Business",
+      about: "About Us",
+      business: "Business Areas",
       product: "Products",
       smartfarm: "Smart Farm",
       contact: "Contact",
@@ -151,8 +152,8 @@ export const translations = {
       title2: "Planting the Future",
       desc1: "Adding smart innovation to nature's honesty,",
       desc2: "we deliver healthy food to tables worldwide.",
-      btnBusiness: "View Business",
-      btnContact: "Inquiry"
+      btnBusiness: "Our Business",
+      btnContact: "Contact Us"
     },
     about: {
       badge: "About Us",
@@ -262,13 +263,151 @@ export const translations = {
       philosophy: "Management Philosophy",
       philosophyDesc: "Seotaean Agriculture Corporation prioritizes the values of 'Honesty', 'Innovation', and 'Coexistence'. By adding smart technology to agricultural products grown in the fertile soil of Taean, we build a sustainable agricultural ecosystem that provides healthy food to consumers and stable income to farmers.",
       history: "Key History",
-      history2024: "Opening of Smart Farm Experience Center and launch of education programs",
-      history2023: "Obtained HACCP certification for ice roasted sweet potato processing facility",
-      history2022: "Establishment of Seotaean Agriculture Corp. and start of Taean rice distribution",
+      history2026_2: "Launch of Smart Farm Experience Center and Education Programs",
+      history2026_1: "Development of Ice Roasted Sweet Potato",
+      history2025_2: "Registration on Naver Smart Store",
+      history2025_1: "Establishment of Seotaean Agriculture Corp. and Start of Taean Rice Distribution",
       promise: "Our Promise",
       promise1: "100% Domestic/Taean-grown raw materials",
       promise2: "Realization of ICT-based precision agriculture",
       promise3: "Leader in the globalization of K-food"
+    }
+  },
+  vi: {
+    nav: {
+      home: "Trang chủ",
+      about: "Giới thiệu",
+      business: "Lĩnh vực kinh doanh",
+      product: "Sản phẩm",
+      smartfarm: "Nông nghiệp thông minh",
+      contact: "Liên hệ",
+      companyName: "Công ty Nông nghiệp Seotaean"
+    },
+    hero: {
+      subtitle: "CÔNG TY NÔNG NGHIỆP SEOTAEAN",
+      title1: "Vùng đất Taean,",
+      title2: "Công nghệ gieo mầm tương lai",
+      desc1: "Kết hợp sự chân thành của thiên nhiên với đổi mới thông minh,",
+      desc2: "chúng tôi mang thực phẩm sạch đến bàn ăn toàn cầu.",
+      btnBusiness: "Lĩnh vực kinh doanh",
+      btnContact: "Liên hệ với chúng tôi"
+    },
+    about: {
+      badge: "Về chúng tôi",
+      title1: "Với niềm tự hào của Taean,",
+      title2: "Tạo ra giá trị mới trong nông nghiệp",
+      desc: "Công ty Nông nghiệp Seotaean dựa trên các sản phẩm nông nghiệp xuất sắc được trồng trong đất đai màu mỡ và gió biển của Taean, Chungnam. Chúng tôi không dừng lại ở các phương pháp canh tác truyền thống mà áp dụng nông nghiệp thông minh dựa trên ICT và công nghệ chế biến sáng tạo để cùng phát triển với nông dân địa phương và mở rộng ra thị trường toàn cầu.",
+      winWin: "Cùng phát triển địa phương",
+      winWinDesc: "Hợp đồng canh tác và thu mua trực tiếp từ các trang trại Taean",
+      quality: "Đảm bảo chất lượng",
+      qualityDesc: "Vận hành các cơ sở được chứng nhận HACCP và GAP",
+      btnDetail: "Xem chi tiết công ty"
+    },
+    business: {
+      badge: "Kinh doanh cốt lõi",
+      title: "Lĩnh vực kinh doanh",
+      biz1: {
+        title: "Chế biến & Xuất khẩu Khoai lang nướng băng",
+        desc: "Chúng tôi biến khoai lang Taean thành món tráng miệng tốt cho sức khỏe có thể thưởng thức mọi lúc, mọi nơi bằng cách cấp đông nhanh.",
+        items: ["Hệ thống chế biến cấp đông nhanh", "100% tự nhiên, không chất phụ gia", "Mở rộng kênh xuất khẩu toàn cầu"]
+      },
+      biz2: {
+        title: "Xay xát & Phân phối Gạo",
+        desc: "Hợp tác với các trang trại địa phương, chúng tôi cung cấp gạo Taean chất lượng cao được xay xát tươi mỗi ngày.",
+        items: ["Vận hành kho lưu trữ nhiệt độ thấp riêng", "Tuân thủ nguyên tắc xay xát trong ngày", "Phân phối giao dịch trực tiếp online/offline"]
+      },
+      biz3: {
+        title: "Kinh doanh Trang trại thông minh",
+        desc: "Chúng tôi phát triển các phương pháp canh tác thông minh dựa trên ICT và tổ chức các trải nghiệm nông nghiệp cho trẻ em.",
+        items: ["Nghiên cứu công nghệ canh tác thông minh", "Chương trình giáo dục/trải nghiệm nông nghiệp", "Hệ thống kiểm soát môi trường tối ưu"]
+      }
+    },
+    product: {
+      badge: "Sản phẩm của chúng tôi",
+      title: "Sản phẩm tiêu biểu",
+      btnAll: "Xem tất cả sản phẩm",
+      storeLink: "Đến Smart Store",
+      item1: {
+        badge: "BÁN CHẠY NHẤT",
+        name: "Khoai lang nướng băng Seotaean",
+        desc: "Khoai lang mật trồng trong đất đỏ Taean, được nướng và cấp đông nhanh.",
+        detail: "Chúng tôi chỉ sử dụng khoai lang mật chất lượng cao được trồng trong vùng đất đỏ màu mỡ của Taean. Được nướng bằng phương pháp truyền thống để tối đa hóa độ ngọt và sau đó được bảo quản bằng công nghệ cấp đông nhanh -40°C để giữ nguyên hương vị tươi ngon và dinh dưỡng. Là món ăn nhẹ 100% tự nhiên không chất phụ gia, được sản xuất hợp vệ sinh tại các cơ sở đạt chứng nhận HACCP, với độ an toàn và chất lượng được công nhận trên thị trường toàn cầu.",
+        tag1: "Không chất phụ gia",
+        tag2: "Cấp đông nhanh"
+      },
+      item2: {
+        badge: "CHẤT LƯỢNG CAO CẤP",
+        name: "Gạo gió biển Taean",
+        desc: "Gạo cao cấp với hương vị tươi ngon dựa trên nguyên tắc xay xát trong ngày.",
+        detail: "Được trồng với gió biển và ánh nắng phong phú của bán đảo Taean, loại gạo này có đặc điểm là độ dẻo tuyệt vời và hương vị thơm ngon. Chúng tôi duy trì độ tươi ngon cao nhất bằng cách tuân thủ nguyên tắc 'xay xát hôm nay, giao hàng hôm nay' tại cơ sở xay xát hiện đại của Seotaean. Thông qua kiểm soát chất lượng nghiêm ngặt, chúng tôi đã giảm hàm lượng protein và tăng cường kết cấu, đảm bảo khả năng cạnh tranh trên thị trường toàn cầu như một loại K-Rice cao cấp.",
+        tag1: "Xay xát trong ngày",
+        tag2: "Bảo quản lạnh"
+      }
+    },
+    smartfarm: {
+      badge: "Nông nghiệp thông minh",
+      title1: "Phát triển bằng dữ liệu,",
+      title2: "Chia sẻ bằng trái tim",
+      feature1: {
+        title: "Nghiên cứu canh tác thông minh",
+        desc: "Chúng tôi nghiên cứu các hệ thống kiểm soát môi trường tăng trưởng tối ưu bằng công nghệ ICT và đưa ra các tiêu chuẩn cho canh tác cây trồng chất lượng cao."
+      },
+      feature2: {
+        title: "Trải nghiệm & Giáo dục nông nghiệp",
+        desc: "Chúng tôi vận hành các chương trình khác nhau nơi trẻ em và gia đình có thể trực tiếp trải nghiệm nông nghiệp thông minh và học hỏi giá trị của cuộc sống."
+      },
+      btnReserve: "Đặt chương trình trải nghiệm"
+    },
+    contact: {
+      title1: "Tìm kiếm đối tác để",
+      title2: "Cùng nhau vẽ nên tương lai của nông nghiệp",
+      desc1: "Mua số lượng lớn, đề xuất hợp tác xuất khẩu, đặt chỗ trải nghiệm trang trại thông minh, v.v.",
+      desc2: "Nếu bạn có bất kỳ câu hỏi nào, xin vui lòng liên hệ với chúng tôi.",
+      desc3: "Các chuyên gia của Seotaean sẽ phản hồi tận tình.",
+      labelPhone: "Điện thoại chính",
+      labelEmail: "Email",
+      form: {
+        name: "Tên/Công ty",
+        namePlaceholder: "Nguyễn Văn A",
+        phone: "Liên hệ",
+        phonePlaceholder: "010-0000-0000",
+        type: "Loại yêu cầu",
+        type1: "Yêu cầu mua sản phẩm",
+        type2: "Hợp tác xuất khẩu/phân phối",
+        type3: "Đặt chỗ trải nghiệm trang trại thông minh",
+        type4: "Các yêu cầu khác",
+        content: "Nội dung",
+        contentPlaceholder: "Vui lòng nhập nội dung yêu cầu của bạn.",
+        btnSubmit: "Gửi yêu cầu"
+      }
+    },
+    footer: {
+      companyName: "Công ty Cổ phần Nông nghiệp Seotaean",
+      desc1: "Nơi thiên nhiên chân thực của Taean gặp gỡ công nghệ thông minh,",
+      desc2: "mở ra một tương lai mới cho nông nghiệp.",
+      links: "Liên kết nhanh",
+      business: "Kinh doanh",
+      contact: "Liên hệ",
+      address: "Huyện Taean, tỉnh Chungcheongnam [Phần còn lại của địa chỉ]",
+      rights: "Bảo lưu mọi quyền.",
+      privacy: "Chính sách bảo mật",
+      terms: "Điều khoản dịch vụ"
+    },
+    aboutDetail: {
+      badge: "Giới thiệu công ty",
+      title1: "Dẫn đầu tương lai của nông nghiệp",
+      title2: "với sự hài hòa của thiên nhiên và công nghệ",
+      philosophy: "Triết lý kinh doanh",
+      philosophyDesc: "Công ty Nông nghiệp Seotaean ưu tiên các giá trị 'Chân thực', 'Đổi mới' và 'Cùng phát triển'. Bằng cách thêm công nghệ thông minh vào các sản phẩm nông nghiệp được trồng trong vùng đất màu mỡ của Taean, chúng tôi xây dựng một hệ sinh thái nông nghiệp bền vững cung cấp thực phẩm sạch cho người tiêu dùng và thu nhập ổn định cho nông dân.",
+      history: "Lịch sử chính",
+      history2026_2: "Ra mắt Trung tâm trải nghiệm trang trại thông minh và các chương trình giáo dục",
+      history2026_1: "Phát triển Khoai lang nướng băng",
+      history2025_2: "Đăng ký trên Naver Smart Store",
+      history2025_1: "Thành lập Công ty Nông nghiệp Seotaean và bắt đầu phân phối gạo Taean",
+      promise: "Lời hứa của chúng tôi",
+      promise1: "100% nguyên liệu trong nước/Taean",
+      promise2: "Thực hiện nông nghiệp chính xác dựa trên ICT",
+      promise3: "Dẫn đầu trong việc toàn cầu hóa thực phẩm Hàn Quốc (K-food)"
     }
   }
 };
